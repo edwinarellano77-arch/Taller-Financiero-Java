@@ -11,8 +11,12 @@ public class Cuenta {
 		this.id = id;
 		this.saldoActual = 0;
 		this.tipo = "A";
+		propietario = new Cliente();
+		
 
 	}
+	
+	
 
 	public String getId() {
 		return id;
@@ -50,7 +54,7 @@ public class Cuenta {
 		String mensaje;
 
 		mensaje = "ID: " + id + " , Saldo Actual:  " + saldoActual + " ,  Tipo: " + tipo + ", Nombre: "
-				+ propietario.getNombre() + "Apellido: " + propietario.getApellido() + "Cedula: "
+				+ propietario.getNombre() + " , Apellido: " + propietario.getApellido() + " , Cedula: "
 				+ propietario.getCedula();
 
 		System.out.println(mensaje);
