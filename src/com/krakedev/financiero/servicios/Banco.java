@@ -5,10 +5,10 @@ import com.krakedev.financiero.entidades.Cuenta;
 
 public class Banco {
 
-	private int ultimoCodigo=1000;
-	
+	private int ultimoCodigo = 1000;
+
 	public Banco() {
-		
+
 	}
 
 	public int getUltimoCodigo() {
@@ -18,21 +18,30 @@ public class Banco {
 	public void setUltimoCodigo(int ultimoCodigo) {
 		this.ultimoCodigo = ultimoCodigo;
 	}
-	
+
 	public Cuenta crearCuenta(Cliente cliente) {
-		
-		String codigoStr = ultimoCodigo + ""; //Convertir ultimo codigo en String
-		
-		ultimoCodigo++; //Incrementar ultimo Codigo
-		
+
+		String codigoStr = ultimoCodigo + ""; // Convertir ultimo codigo en String
+
+		ultimoCodigo++; // Incrementar ultimo Codigo
+
 		Cuenta c1 = new Cuenta(codigoStr);
-		
+
 		c1.setPropietario(cliente);
-		
+
 		return c1;
+
+	}
+
+	public boolean depositar(double monto, Cuenta cuenta) {
 		
-		
-		
-		
+		if(monto>0) {
+			double nuevoSaldo;
+			nuevoSaldo=cuenta.getSaldoActual()+monto;
+			cuenta.setSaldoActual(nuevoSaldo);
+			return true;
+		}else {
+			return false;
+		}
 	}
 }
