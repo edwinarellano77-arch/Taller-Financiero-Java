@@ -17,11 +17,10 @@ public class TestUnitariosJunit {
 
 	@BeforeEach
 	public void setUp() {
-		// Un Banco nuevo antes de cada prueba (ultimoCodigo = 1000)
 		banco = new Banco();
 	}
 
-	// ---- Pruebas de códigos consecutivos ----
+	// ---- Códigos consecutivos ----
 
 	@Test
 	public void testPrimeraCuentaEmpiezaEn1000() {
@@ -44,11 +43,10 @@ public class TestUnitariosJunit {
 	public void testUltimoCodigoSeIncrementa() {
 		banco.crearCuenta(new Cliente());
 		banco.crearCuenta(new Cliente());
-		// Tras crear 2 cuentas, el ultimoCodigo debe ir en 1002
 		assertEquals(1002, banco.getUltimoCodigo());
 	}
 
-	// ---- Pruebas del método depositar ----
+	// ---- Depositar ----
 
 	@Test
 	public void testDepositarMontoPositivo() {
@@ -57,8 +55,8 @@ public class TestUnitariosJunit {
 
 		boolean resultado = banco.depositar(50, cuenta);
 
-		assertTrue(resultado);                       // debe retornar true
-		assertEquals(150, cuenta.getSaldoActual());  // 100 + 50
+		assertTrue(resultado);
+		assertEquals(150, cuenta.getSaldoActual());
 	}
 
 	@Test
@@ -68,7 +66,42 @@ public class TestUnitariosJunit {
 
 		boolean resultado = banco.depositar(-20, cuenta);
 
-		assertFalse(resultado);                      // debe retornar false
-		assertEquals(100, cuenta.getSaldoActual());  // el saldo NO cambia
+		assertFalse(resultado);
+		assertEquals(100, cuenta.getSaldoActual());
+	}
+
+	// ---- Retirar ----
+
+	@Test
+	public void testRetirarMontoValido() {
+		Cuenta cuenta = banco.crearCuenta(new Cliente());
+		cuenta.setSaldoActual(100);
+
+		boolean resultado = banco.retirar(40, cuenta);
+
+		assertTrue(resultado);                       // retiro permitido
+		assertEquals(60, cuenta.getSaldoActual());   // 100 - 40
+	}
+
+	@Test
+	public void testRetirarMontoMayorAlSaldo() {
+		Cuenta cuenta = banco.crearCuenta(new Cliente());
+		cuenta.setSaldoActual(100);
+
+		boolean resultado = banco.retirar(150, cuenta);
+
+		assertFalse(resultado);                      // no alcanza el saldo
+		assertEquals(100, cuenta.getSaldoActual());  // saldo intacto
+	}
+
+	@Test
+	public void testRetirarMontoCeroONegativo() {
+		Cuenta cuenta = banco.crearCuenta(new Cliente());
+		cuenta.setSaldoActual(100);
+
+		boolean resultado = banco.retirar(-30, cuenta);
+
+		assertFalse(resultado);                      // monto inválido
+		assertEquals(100, cuenta.getSaldoActual());  // saldo intacto
 	}
 }
