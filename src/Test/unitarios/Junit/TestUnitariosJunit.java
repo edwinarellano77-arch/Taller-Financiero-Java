@@ -79,8 +79,8 @@ public class TestUnitariosJunit {
 
 		boolean resultado = banco.retirar(40, cuenta);
 
-		assertTrue(resultado);                       // retiro permitido
-		assertEquals(60, cuenta.getSaldoActual());   // 100 - 40
+		assertTrue(resultado);
+		assertEquals(60, cuenta.getSaldoActual());
 	}
 
 	@Test
@@ -90,8 +90,8 @@ public class TestUnitariosJunit {
 
 		boolean resultado = banco.retirar(150, cuenta);
 
-		assertFalse(resultado);                      // no alcanza el saldo
-		assertEquals(100, cuenta.getSaldoActual());  // saldo intacto
+		assertFalse(resultado);
+		assertEquals(100, cuenta.getSaldoActual());
 	}
 
 	@Test
@@ -101,7 +101,51 @@ public class TestUnitariosJunit {
 
 		boolean resultado = banco.retirar(-30, cuenta);
 
-		assertFalse(resultado);                      // monto inválido
-		assertEquals(100, cuenta.getSaldoActual());  // saldo intacto
+		assertFalse(resultado);
+		assertEquals(100, cuenta.getSaldoActual());
+	}
+
+	// ---- Transferir ----
+
+	@Test
+	public void testTransferirExitosa() {
+		Cuenta origen = banco.crearCuenta(new Cliente());
+		Cuenta destino = banco.crearCuenta(new Cliente());
+		origen.setSaldoActual(100);
+		destino.setSaldoActual(50);
+
+		boolean resultado = banco.transferir(origen, destino, 30);
+
+		assertTrue(resultado);                        // transferencia permitida
+		assertEquals(70, origen.getSaldoActual());    // 100 - 30
+		assertEquals(80, destino.getSaldoActual());   // 50 + 30
+	}
+
+	@Test
+	public void testTransferirFondosInsuficientes() {
+		Cuenta origen = banco.crearCuenta(new Cliente());
+		Cuenta destino = banco.crearCuenta(new Cliente());
+		origen.setSaldoActual(100);
+		destino.setSaldoActual(50);
+
+		boolean resultado = banco.transferir(origen, destino, 150);
+
+		assertFalse(resultado);                       // retiro falla -> no transfiere
+		assertEquals(100, origen.getSaldoActual());   // origen intacto
+		assertEquals(50, destino.getSaldoActual());   // destino intacto
+	}
+
+	@Test
+	public void testTransferirMontoInvalido() {
+		Cuenta origen = banco.crearCuenta(new Cliente());
+		Cuenta destino = banco.crearCuenta(new Cliente());
+		origen.setSaldoActual(100);
+		destino.setSaldoActual(50);
+
+		boolean resultado = banco.transferir(origen, destino, -10);
+
+		assertFalse(resultado);                       // monto invalido
+		assertEquals(100, origen.getSaldoActual());   // nada se mueve
+		assertEquals(50, destino.getSaldoActual());
 	}
 }
